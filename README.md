@@ -1,0 +1,1 @@
+This project is about simple game created with SDL3 library with C.
