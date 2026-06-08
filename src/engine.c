@@ -64,6 +64,8 @@ bool engine_run(Engine* engine) {
         SDL_RenderClear(engine->renderer);
         SDL_RenderPresent(engine->renderer);
     }
+
+    return true;
 }
 
 /**
