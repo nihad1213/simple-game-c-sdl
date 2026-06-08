@@ -12,6 +12,5 @@ typedef struct {
     bool is_running;
 } Engine;
 
-bool engine_init(Engine* engine, char* title, int width, int height);
-bool engine_window_init(Engine* engine, char* title, int width, int height);
+bool engine_init(Engine* engine, const char* title, int width, int height);
 void engine_cleanup(Engine* engine);
