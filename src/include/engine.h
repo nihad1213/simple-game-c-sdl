@@ -12,4 +12,6 @@ typedef struct {
     bool is_running;
 } Engine;
 
+
 bool engine_window_init();
+void engine_cleanup();
