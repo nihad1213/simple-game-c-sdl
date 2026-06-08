@@ -40,3 +40,28 @@ bool engine_init(Engine* engine, const char* title, int width, int height) {
 
     return true;
 }
+
+/**
+ * @brief Runs the main game loop, processing events and rendering graphics.
+ * 
+ * This function will continue to run until the engine's is_running flag is set to false, 
+ * typically in response to a quit event.
+ * 
+ * @param engine A pointer to the Engine struct to run.
+ * @return true if the game loop runs successfully, false if there is an error.
+ */
+bool engine_run(Engine* engine) {
+    SDL_Event event;
+
+    while (engine->is_running) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
+                engine->is_running = false;
+            }
+        }
+
+        SDL_SetRenderDrawColor(engine->renderer, 0, 0, 0, 255);
+        SDL_RenderClear(engine->renderer);
+        SDL_RenderPresent(engine->renderer);
+    }
+}
