@@ -65,3 +65,23 @@ bool engine_run(Engine* engine) {
         SDL_RenderPresent(engine->renderer);
     }
 }
+
+/**
+ * @brief Cleans up the game engine, destroying the window and renderer, and quitting SDL.
+ * 
+ * This function should be called when the game is exiting to free resources and ensure a clean shutdown.
+ * 
+ * @param engine A pointer to the Engine struct to clean up.
+ * @return void
+ */
+void engine_cleanup(Engine* engine) {
+    if (engine->renderer) {
+        SDL_DestroyRenderer(engine->renderer);
+    }
+
+    if (engine->window) {
+        SDL_DestroyWindow(engine->window);
+    }
+    
+    SDL_Quit();
+}
