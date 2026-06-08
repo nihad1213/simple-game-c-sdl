@@ -16,4 +16,5 @@ typedef struct {
 } Engine;
 
 bool engine_init(Engine* engine, const char* title, int width, int height);
+bool engine_run(Engine* engine);
 void engine_cleanup(Engine* engine);
