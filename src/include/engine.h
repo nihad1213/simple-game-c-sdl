@@ -9,6 +9,7 @@ typedef struct {
     SDL_Renderer* renderer;
     int width;
     int height;
+    bool is_running;
 } Engine;
 
 bool engine_window_init();
