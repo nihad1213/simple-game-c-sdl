@@ -1,0 +1,14 @@
+#include "asset_loader.h"
+
+/**
+ * @brief Add background image.
+ * 
+ * This function will be add background image. This function is used to add .gif as a background
+ * 
+ * @param background A pointer to the Background struct to initialize.
+ * @return true if initialization is successful, false otherwise.
+ */
+bool add_background_image(Background* background) {
+
+    return true;
+}
