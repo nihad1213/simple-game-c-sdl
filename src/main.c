@@ -5,7 +5,7 @@
 int main() {
     Engine engine;
 
-    if (!engine_init(&engine, "My Game", 800, 600)) {
+    if (!engine_init(&engine, "My Game", 1080, 1220)) {
         printf("Engine initialization failed!\n");
         return 1;
     }
