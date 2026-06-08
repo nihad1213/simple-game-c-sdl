@@ -1,4 +1,4 @@
-#include <engine.h>
+#include "engine.h"
 #include <stdio.h>
 
 /**
@@ -82,6 +82,6 @@ void engine_cleanup(Engine* engine) {
     if (engine->window) {
         SDL_DestroyWindow(engine->window);
     }
-    
+
     SDL_Quit();
 }
