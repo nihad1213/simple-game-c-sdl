@@ -1,4 +1,6 @@
 #include "asset_loader.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 /**
  * @brief Add background image.
