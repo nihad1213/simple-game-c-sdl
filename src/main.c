@@ -1,6 +1,6 @@
-#include <stdio.h>
+#include "asset_loader.h"
 #include "engine.h"
-
+#include <stdio.h>
 
 int main() {
     Engine engine;
