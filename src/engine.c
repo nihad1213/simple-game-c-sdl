@@ -54,8 +54,10 @@ bool engine_init(Engine* engine, const char* title, int width, int height) {
 bool engine_run(Engine* engine) {
     SDL_Event event;
     Background bg = {
-        .path = "/assets/background.gif"
+        .path = "assets/background.gif"
     };
+
+    add_background_image(engine->renderer, &bg);
 
     while (engine->is_running) {
         while (SDL_PollEvent(&event)) {
@@ -64,7 +66,7 @@ bool engine_run(Engine* engine) {
             }
         }
 
-        SDL_SetRenderDrawColor(engine->renderer, 0, 0, 0, 255);
+        // SDL_SetRenderDrawColor(engine->renderer, 0, 0, 0, 255);
         SDL_RenderClear(engine->renderer);
         SDL_RenderTexture(engine->renderer, bg.texture, NULL, NULL);
         SDL_RenderPresent(engine->renderer);
