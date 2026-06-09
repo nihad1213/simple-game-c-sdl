@@ -9,6 +9,7 @@
  * @return true if initialization is successful, false otherwise.
  */
 bool add_background_image(Background* background) {
-
+    SDL_Surface * IMG_LoadGIF_IO(SDL_IOStream *src);
+    
     return true;
 }
