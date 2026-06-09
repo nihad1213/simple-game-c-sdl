@@ -6,6 +6,7 @@
  * @brief Add background image.
  * 
  * This function will be add background image. This function is used to add .gif as a background
+ * Falls back to single-frame loading for non-Gif formats.
  *
  * @param renderer A pointer to the SDL_Renderer struct to initialize
  * @param background A pointer to the Background struct to initialize.
@@ -33,7 +34,7 @@ bool add_background_image(SDL_Renderer* renderer, Background* background) {
         return false;
     }
 
-    background->texture = SDL_CreateTextureFromSurface(renderer, surface);
+    background->frames = SDL_CreateTextureFromSurface(renderer, surface);
 
     background->width = w;
     background->height = h;
@@ -41,5 +42,33 @@ bool add_background_image(SDL_Renderer* renderer, Background* background) {
     SDL_DestroySurface(surface);
     stbi_image_free(data);
 
-    return background->texture != NULL;
+    return background->frames != NULL;
+}
+
+/**
+ * @brief Advance the animation based on elapsed time.
+ *
+ * @param background A pointer to the Background struct to update.
+ */
+void update_background(Background* background) {
+
+} 
+
+/**
+ * @brief Render the current frame of the background, stretched to the window.
+ *
+ * @param renderer A pointer to the SDL_Renderer to draw with.
+ * @param background A pointer to the Background struct to render.
+ */
+void render_background(SDL_Renderer* renderer, Background* background) {
+
+}
+
+/**
+ * @brief Destroy all frame textures and free the Background's allocations.
+ *
+ * @param background A pointer to the Background struct to free.
+ */
+void free_background(Background* background) {
+
 }
