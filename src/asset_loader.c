@@ -12,7 +12,34 @@
  * @return true if initialization is successful, false otherwise.
  */
 bool add_background_image(SDL_Renderer* renderer, Background* background) {
-    SDL_Surface * IMG_LoadGIF_IO(SDL_IOStream *src);
-    
-    return true;
+    int w, h, channels;
+
+    unsigned char* data = stbi_load(background->path, &w, &h, &channels, 4);
+    if (!data) {
+        SDL_Log("Failed to load image: %s", background->path);
+        return false;
+    }
+
+    SDL_Surface* surface = SDL_CreateSurfaceFrom(
+        w,
+        h,
+        SDL_PIXELFORMAT_RGBA32,
+        data,
+        w * 4
+    );
+
+    if (!surface) {
+        stbi_image_free(data);
+        return false;
+    }
+
+    background->texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    background->width = w;
+    background->height = h;
+
+    SDL_DestroySurface(surface);
+    stbi_image_free(data);
+
+    return background->texture != NULL;
 }
