@@ -9,4 +9,4 @@ typedef struct {
     int height;
 } Background;
 
-bool add_background_image(Background* background);
+bool add_background_image(SDL_Renderer* renderer, Background* background);
