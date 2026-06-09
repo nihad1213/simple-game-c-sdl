@@ -4,6 +4,9 @@
 
 typedef struct {
     const char* path;
+    SDL_Texture* texture;
+    int width;
+    int height;
 } Background;
 
 bool add_background_image(Background* background);
