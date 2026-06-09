@@ -20,7 +20,7 @@ CFLAGS += $(SDL_CFLAGS)
 all: $(TARGET)
 
 $(TARGET): $(OBJS) | bin
-	$(CC) $(OBJS) -o $@ $(SDL_LIBS)
+	$(CC) $(OBJS) -o $@ $(SDL_LIBS) -lm
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
