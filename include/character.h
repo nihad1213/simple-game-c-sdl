@@ -46,3 +46,8 @@ typedef struct {
     Animation animations[ANIM_COUNT];   /**< Array of animations indexed by AnimationStates enum. */
     AnimationStates state;              /**< Current animation state of the player. */
 } Player;
+
+bool  player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool facing_right);
+void  player_update(Player* player);
+void  player_render(Player* player, SDL_Renderer* renderer);
+void  player_free(Player* player);
