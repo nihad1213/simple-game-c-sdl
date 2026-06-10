@@ -18,7 +18,8 @@ typedef enum {
     ANIM_DEATH,      /**< Character has died or is in death animation. */
     ANIM_ATTACK1,    /**< Character performs the first attack action. */
     ANIM_ATTACK2,    /**< Character performs the second attack action. */
-    ANIM_TAKE_HIT    /**< Character is reacting to damage. */
+    ANIM_TAKE_HIT,    /**< Character is reacting to damage. */
+    ANIM_COUNT
 } AnimationStates;
 
 /**
@@ -33,3 +34,13 @@ typedef struct {
     Uint32 last_frame_time;    /**< Timestamp of the last frame update (in milliseconds). */
     int frame_delay_ms;        /**< Time delay between frames in milliseconds. */
 } Animation;
+
+typedef struct {
+    float x, y;
+    float vel_x, vel_y;
+    bool facing_right;
+    bool on_ground;
+
+    Animation animations[ANIM_COUNT];
+    AnimationStates state;
+} Player;
