@@ -10,17 +10,22 @@ BUILD_DIR := build
 SRCS := $(wildcard $(SRC_DIR)/*.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
+# SDL3
 SDL_CFLAGS := $(shell pkg-config --cflags sdl3)
 SDL_LIBS := $(shell pkg-config --libs sdl3)
 
-CFLAGS += $(SDL_CFLAGS)
+# SDL_image
+SDL_IMAGE_CFLAGS := $(shell pkg-config --cflags SDL3_image)
+SDL_IMAGE_LIBS := $(shell pkg-config --libs SDL3_image)
+
+CFLAGS += $(SDL_CFLAGS) $(SDL_IMAGE_CFLAGS)
 
 .PHONY: all clean run
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS) | bin
-	$(CC) $(OBJS) -o $@ $(SDL_LIBS) -lm
+	$(CC) $(OBJS) -o $@ $(SDL_LIBS) $(SDL_IMAGE_LIBS) -lm
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
