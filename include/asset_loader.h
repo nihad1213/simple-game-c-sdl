@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
 /**
  * @brief The Background struct holds an animated (or static) background image.
@@ -17,6 +18,6 @@ typedef struct {
 } Background;
 
 bool add_background_image(SDL_Renderer* renderer, Background* background);
-void update_background(Background* background);
-void render_background(SDL_Renderer* renderer, Background* background);
-void free_background(Background* background);
+// void update_background(Background* background);
+// void render_background(SDL_Renderer* renderer, Background* background);
+// void free_background(Background* background);
