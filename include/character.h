@@ -18,8 +18,8 @@ typedef enum {
     ANIM_DEATH,      /**< Character has died or is in death animation. */
     ANIM_ATTACK1,    /**< Character performs the first attack action. */
     ANIM_ATTACK2,    /**< Character performs the second attack action. */
-    ANIM_TAKE_HIT,    /**< Character is reacting to damage. */
-    ANIM_COUNT
+    ANIM_TAKE_HIT,   /**< Character is reacting to damage. */
+    ANIM_COUNT       /**< Total number of animation states. */
 } AnimationStates;
 
 /**
@@ -35,12 +35,18 @@ typedef struct {
     int frame_delay_ms;        /**< Time delay between frames in milliseconds. */
 } Animation;
 
+/**
+ * @brief Represents a playable character in the game world.
+ */
 typedef struct {
-    float x, y;
-    float vel_x, vel_y;
-    bool facing_right;
-    bool on_ground;
+    float x, y;                 /**< Position of the player in world coordinates. */
+    float vel_x, vel_y;        /**< Velocity of the player on X and Y axes. */
+
+    bool facing_right;         /**< Direction the player is facing. */
+    bool on_ground;            /**< Whether the player is touching the ground. */
 
     Animation animations[ANIM_COUNT];
-    AnimationStates state;
+    /**< Array of animations indexed by AnimationStates enum. */
+
+    AnimationStates state;     /**< Current animation state of the player. */
 } Player;
