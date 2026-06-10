@@ -16,7 +16,9 @@ typedef enum {
     ANIM_ATTACK1,
     ANIM_ATTACK2,
     ANIM_TAKE_HIT
-} Animation;
+} AnimationStates;
+
+
 
 
 
