@@ -15,8 +15,8 @@ SDL_CFLAGS := $(shell pkg-config --cflags sdl3)
 SDL_LIBS := $(shell pkg-config --libs sdl3)
 
 # SDL_image
-SDL_IMAGE_CFLAGS := $(shell pkg-config --cflags SDL3_image)
-SDL_IMAGE_LIBS := $(shell pkg-config --libs SDL3_image)
+SDL_IMAGE_CFLAGS := $(shell pkg-config --cflags sdl3-image)
+SDL_IMAGE_LIBS := $(shell pkg-config --libs sdl3-image)
 
 CFLAGS += $(SDL_CFLAGS) $(SDL_IMAGE_CFLAGS)
 
