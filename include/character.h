@@ -41,6 +41,7 @@ typedef struct {
 typedef struct {
     float x, y;                         /**< Position of the player in world coordinates. */
     float vel_x, vel_y;                 /**< Velocity of the player on X and Y axes. */
+    float scale;                        /**< Scale of character */
     bool facing_right;                  /**< Direction the player is facing. */
     bool on_ground;                     /**< Whether the player is touching the ground. */
     Animation animations[ANIM_COUNT];   /**< Array of animations indexed by AnimationStates enum. */
