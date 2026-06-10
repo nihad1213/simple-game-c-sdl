@@ -1,0 +1,8 @@
+Idle - 8 frames
+Run - 8 frames
+Jump - 4 frames
+Fall - 4 frames
+Attack1 - 6 frames
+Attack2 - 6 frames
+Take Hit - 4 frames
+Death - 6 frames
