@@ -47,6 +47,22 @@ typedef struct {
     AnimationStates state;              /**< Current animation state of the player. */
 } Player;
 
+
+/**
+ * @brief Stores file paths for all player animation sprite sheets.
+ */
+typedef struct {
+    const char* idle;       /**< Path to the idle animation sprite sheet. */
+    const char* run;        /**< Path to the running animation sprite sheet. */
+    const char* jump;       /**< Path to the jump animation sprite sheet. */
+    const char* fall;       /**< Path to the falling animation sprite sheet. */
+    const char* attack1;    /**< Path to the first attack animation sprite sheet. */
+    const char* attack2;    /**< Path to the second attack animation sprite sheet. */
+    const char* take_hit;   /**< Path to the hit reaction animation sprite sheet. */
+    const char* death;      /**< Path to the death animation sprite sheet. */
+} PlayerSpritePaths;
+
+
 bool  player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool facing_right);
 void  player_update(Player* player);
 void  player_render(Player* player, SDL_Renderer* renderer);
