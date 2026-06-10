@@ -26,7 +26,7 @@ typedef enum {
  * @brief Represents a sprite-based animation system for textures.
  */
 typedef struct {
-    SDL_Texture* texture;      /**< Single texture or spritesheet used for animation. */
+    SDL_Texture* sheet;      /**< Single sheet or spritesheet used for animation. */
     int frame_count;           /**< Total number of frames in the animation. */
     int frame_width;           /**< Width of a single animation frame in pixels. */
     int frame_height;          /**< Height of a single animation frame in pixels. */
