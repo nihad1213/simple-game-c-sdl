@@ -18,6 +18,16 @@ typedef enum {
     ANIM_TAKE_HIT
 } AnimationStates;
 
+typedef struct {
+    SDL_Texture* texture;
+    int frame_count;
+    int frame_width;
+    int frame_height;
+    int current_frame;
+    Uint32 last_frame_time;
+    int frame_delay_ms;
+} Animation;
+
 
 
 
