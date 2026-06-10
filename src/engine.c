@@ -52,6 +52,8 @@ bool engine_init(Engine* engine, const char* title, int width, int height) {
  * @return true if the game loop runs successfully, false if there is an error.
  */
 bool engine_run(Engine* engine) {
+    #define GIF_SPEED_FACTOR 2.0f
+
     SDL_Event event;
     Background bg = {
         .path = "assets/background.gif"
@@ -68,7 +70,7 @@ bool engine_run(Engine* engine) {
 
         Uint64 now = SDL_GetTicks();
         if (bg.frame_count > 1 && bg.delays) {
-            if (now - bg.last_frame_time >= (Uint64)bg.delays[bg.current_frame]) {
+            if (now - bg.last_frame_time >= (Uint64)bg.delays[bg.current_frame] * GIF_SPEED_FACTOR) {
                 bg.current_frame = (bg.current_frame + 1) % bg.frame_count;
                 bg.last_frame_time = now;
             }
