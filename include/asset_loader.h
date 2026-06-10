@@ -18,6 +18,4 @@ typedef struct {
 } Background;
 
 bool add_background_image(SDL_Renderer* renderer, Background* background);
-// void update_background(Background* background);
-// void render_background(SDL_Renderer* renderer, Background* background);
-// void free_background(Background* background);
+void free_background(Background* background);
