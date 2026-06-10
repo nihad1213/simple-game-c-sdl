@@ -63,7 +63,7 @@ typedef struct {
 } PlayerSpritePaths;
 
 
-bool  player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool facing_right);
+bool  player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool facing_right, const PlayerSpritePaths* paths);
 void  player_update(Player* player);
 void  player_render(Player* player, SDL_Renderer* renderer);
 void  player_free(Player* player);
