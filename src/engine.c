@@ -66,12 +66,20 @@ bool engine_run(Engine* engine) {
             }
         }
 
-        // SDL_SetRenderDrawColor(engine->renderer, 0, 0, 0, 255);
+        Uint64 now = SDL_GetTicks();
+        if (bg.frame_count > 1 && bg.delays) {
+            if (now - bg.last_frame_time >= (Uint64)bg.delays[bg.current_frame]) {
+                bg.current_frame = (bg.current_frame + 1) % bg.frame_count;
+                bg.last_frame_time = now;
+            }
+        }
+
         SDL_RenderClear(engine->renderer);
-        SDL_RenderTexture(engine->renderer, bg.texture, NULL, NULL);
+        SDL_RenderTexture(engine->renderer, bg.frames[bg.current_frame], NULL, NULL);
         SDL_RenderPresent(engine->renderer);
     }
 
+    free_background(&bg);
     return true;
 }
 
