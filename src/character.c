@@ -18,7 +18,7 @@
  *
  * @return true if the animation was loaded successfully, false otherwise.
  */
-static bool load_anumation(SDL_Renderer* renderer, Animation* animation, 
+static bool load_animation(SDL_Renderer* renderer, Animation* animation, 
                             const char* path, int frame_count, int frame_delay_ms) {
     
     SDL_Surface* surface = IMG_Load(path);
