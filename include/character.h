@@ -21,12 +21,15 @@ typedef enum {
     ANIM_TAKE_HIT    /**< Character is reacting to damage. */
 } AnimationStates;
 
+/**
+ * @brief Represents a sprite-based animation system for textures.
+ */
 typedef struct {
-    SDL_Texture* texture;
-    int frame_count;
-    int frame_width;
-    int frame_height;
-    int current_frame;
-    Uint32 last_frame_time;
-    int frame_delay_ms;
+    SDL_Texture* texture;      /**< Single texture or spritesheet used for animation. */
+    int frame_count;           /**< Total number of frames in the animation. */
+    int frame_width;           /**< Width of a single animation frame in pixels. */
+    int frame_height;          /**< Height of a single animation frame in pixels. */
+    int current_frame;         /**< Index of the currently active frame. */
+    Uint32 last_frame_time;    /**< Timestamp of the last frame update (in milliseconds). */
+    int frame_delay_ms;        /**< Time delay between frames in milliseconds. */
 } Animation;
