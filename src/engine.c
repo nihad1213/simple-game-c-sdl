@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "asset_loader.h"
+#include "character.h"
 #include <stdio.h>
 
 /**
@@ -54,6 +55,23 @@ bool engine_init(Engine* engine, const char* title, int width, int height) {
 bool engine_run(Engine* engine) {
     #define GIF_SPEED_FACTOR 2.0f
 
+    Player p1;
+    PlayerSpritePaths p1_paths = {
+        .idle     = "assets/p1/Sprites/Idle.png",
+        .run      = "assets/p1/Sprites/Run.png",
+        .jump     = "assets/p1/Sprites/Jump.png",
+        .fall     = "assets/p1/Sprites/Fall.png",
+        .attack1  = "assets/p1/Sprites/Attack1.png",
+        .attack2  = "assets/p1/Sprites/Attack2.png",
+        .take_hit = "assets/p1/Sprites/Take Hit.png",
+        .death    = "assets/p1/Sprites/Death.png",
+    };
+
+    if (!player_init(&p1, engine->renderer, 200.0f, 500.0f, true, &p1_paths)) {
+        SDL_Log("Failed to init player 1");
+        return false;
+    }
+
     SDL_Event event;
     Background bg = {
         .path = "assets/background.gif"
@@ -78,9 +96,14 @@ bool engine_run(Engine* engine) {
 
         SDL_RenderClear(engine->renderer);
         SDL_RenderTexture(engine->renderer, bg.frames[bg.current_frame], NULL, NULL);
+        
+        player_update(&p1);
+        player_render(&p1, engine->renderer);
+        
         SDL_RenderPresent(engine->renderer);
     }
 
+    player_free(&p1);
     free_background(&bg);
     return true;
 }
