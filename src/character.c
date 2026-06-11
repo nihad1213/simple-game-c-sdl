@@ -28,7 +28,7 @@ static bool load_animation(SDL_Renderer* renderer, Animation* anim, const char* 
 }
 
 bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool facing_right, 
-    const PlayerSpritePaths* paths) {
+                 const PlayerSpritePaths* paths) {
 
     player->x = x;
     player->y = y;
@@ -58,5 +58,14 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
     }
 
     return true;
+}
 
+void player_update(Player* player) {
+    Animation* anim = &player->animations[player->state];
+    Uint64 now = SDL_GetTicks();
+
+    if (now - anim->last_frame_time >= (Uint64)anim->frame_delay_ms) {
+        anim->current_frame   = (anim->current_frame + 1) % anim->frame_count;
+        anim->last_frame_time = now;
+    }
 }
