@@ -67,8 +67,25 @@ bool engine_run(Engine* engine) {
         .death    = "assets/p1/Sprites/Death.png",
     };
 
+    Player p2;
+    PlayerSpritePaths p2_paths = {
+        .idle     = "assets/p2/Sprites/Idle.png",
+        .run      = "assets/p2/Sprites/Run.png",
+        .jump     = "assets/p2/Sprites/Jump.png",
+        .fall     = "assets/p2/Sprites/Fall.png",
+        .attack1  = "assets/p2/Sprites/Attack1.png",
+        .attack2  = "assets/p2/Sprites/Attack2.png",
+        .take_hit = "assets/p2/Sprites/Take hit.png",
+        .death    = "assets/p2/Sprites/Death.png",
+    };
+
     if (!player_init(&p1, engine->renderer, 200.0f, 500.0f, true, &p1_paths)) {
         SDL_Log("Failed to init player 1");
+        return false;
+    }
+
+    if (!player_init(&p2, engine->renderer, 800.0f, 500.0f, false, &p2_paths)) {
+        SDL_Log("Failed to init player 2");
         return false;
     }
 
@@ -97,13 +114,19 @@ bool engine_run(Engine* engine) {
         SDL_RenderClear(engine->renderer);
         SDL_RenderTexture(engine->renderer, bg.frames[bg.current_frame], NULL, NULL);
         
+
         player_update(&p1);
         player_render(&p1, engine->renderer);
         
+        player_update(&p2);
+        player_render(&p2, engine->renderer);
+        
+
         SDL_RenderPresent(engine->renderer);
     }
 
     player_free(&p1);
+    player_free(&p2);
     free_background(&bg);
     return true;
 }
@@ -118,9 +141,7 @@ bool engine_run(Engine* engine) {
  */
 void engine_cleanup(Engine* engine) {
     if (engine->renderer) SDL_DestroyRenderer(engine->renderer);
-
     if (engine->window) SDL_DestroyWindow(engine->window);
-
 
     SDL_Quit();
 }
