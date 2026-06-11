@@ -117,13 +117,10 @@ bool engine_run(Engine* engine) {
  * @return void
  */
 void engine_cleanup(Engine* engine) {
-    if (engine->renderer) {
-        SDL_DestroyRenderer(engine->renderer);
-    }
+    if (engine->renderer) SDL_DestroyRenderer(engine->renderer);
 
-    if (engine->window) {
-        SDL_DestroyWindow(engine->window);
-    }
+    if (engine->window) SDL_DestroyWindow(engine->window);
+
 
     SDL_Quit();
 }
