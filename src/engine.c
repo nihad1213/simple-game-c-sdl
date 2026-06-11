@@ -69,12 +69,12 @@ bool engine_run(Engine* engine) {
 
     Player p2;
     PlayerAnimDef p2_defs[ANIM_COUNT] = {
-        [ANIM_IDLE]     = { "assets/p2/Sprites/Idle.png",     4, 100 },
+        [ANIM_IDLE]     = { "assets/p2/Sprites/Idle.png",     4, 200 },
         [ANIM_RUN]      = { "assets/p2/Sprites/Run.png",      8,  80 },
-        [ANIM_JUMP]     = { "assets/p2/Sprites/Jump.png",     2, 100 },
-        [ANIM_FALL]     = { "assets/p2/Sprites/Fall.png",     2, 100 },
-        [ANIM_ATTACK1]  = { "assets/p2/Sprites/Attack1.png",  4,  80 },
-        [ANIM_ATTACK2]  = { "assets/p2/Sprites/Attack2.png",  4,  80 },
+        [ANIM_JUMP]     = { "assets/p2/Sprites/Jump.png",     2, 200 },
+        [ANIM_FALL]     = { "assets/p2/Sprites/Fall.png",     2, 200 },
+        [ANIM_ATTACK1]  = { "assets/p2/Sprites/Attack1.png",  4,  120 },
+        [ANIM_ATTACK2]  = { "assets/p2/Sprites/Attack2.png",  4,  120 },
         [ANIM_TAKE_HIT] = { "assets/p2/Sprites/Take hit.png", 3, 100 },
         [ANIM_DEATH]    = { "assets/p2/Sprites/Death.png",    7, 120 },
     };
