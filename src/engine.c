@@ -56,35 +56,35 @@ bool engine_run(Engine* engine) {
     #define GIF_SPEED_FACTOR 2.0f
 
     Player p1;
-    PlayerSpritePaths p1_paths = {
-        .idle     = "assets/p1/Sprites/Idle.png",
-        .run      = "assets/p1/Sprites/Run.png",
-        .jump     = "assets/p1/Sprites/Jump.png",
-        .fall     = "assets/p1/Sprites/Fall.png",
-        .attack1  = "assets/p1/Sprites/Attack1.png",
-        .attack2  = "assets/p1/Sprites/Attack2.png",
-        .take_hit = "assets/p1/Sprites/Take Hit.png",
-        .death    = "assets/p1/Sprites/Death.png",
+    PlayerAnimDef p1_defs[ANIM_COUNT] = {
+        [ANIM_IDLE]     = { "assets/p1/Sprites/Idle.png",     8, 100 },
+        [ANIM_RUN]      = { "assets/p1/Sprites/Run.png",      8,  80 },
+        [ANIM_JUMP]     = { "assets/p1/Sprites/Jump.png",     4, 100 },
+        [ANIM_FALL]     = { "assets/p1/Sprites/Fall.png",     4, 100 },
+        [ANIM_ATTACK1]  = { "assets/p1/Sprites/Attack1.png",  6,  80 },
+        [ANIM_ATTACK2]  = { "assets/p1/Sprites/Attack2.png",  6,  80 },
+        [ANIM_TAKE_HIT] = { "assets/p1/Sprites/Take Hit.png", 4, 100 },
+        [ANIM_DEATH]    = { "assets/p1/Sprites/Death.png",    6, 120 },
     };
 
     Player p2;
-    PlayerSpritePaths p2_paths = {
-        .idle     = "assets/p2/Sprites/Idle.png",
-        .run      = "assets/p2/Sprites/Run.png",
-        .jump     = "assets/p2/Sprites/Jump.png",
-        .fall     = "assets/p2/Sprites/Fall.png",
-        .attack1  = "assets/p2/Sprites/Attack1.png",
-        .attack2  = "assets/p2/Sprites/Attack2.png",
-        .take_hit = "assets/p2/Sprites/Take hit.png",
-        .death    = "assets/p2/Sprites/Death.png",
+    PlayerAnimDef p2_defs[ANIM_COUNT] = {
+        [ANIM_IDLE]     = { "assets/p2/Sprites/Idle.png",     4, 100 },
+        [ANIM_RUN]      = { "assets/p2/Sprites/Run.png",      8,  80 },
+        [ANIM_JUMP]     = { "assets/p2/Sprites/Jump.png",     2, 100 },
+        [ANIM_FALL]     = { "assets/p2/Sprites/Fall.png",     2, 100 },
+        [ANIM_ATTACK1]  = { "assets/p2/Sprites/Attack1.png",  4,  80 },
+        [ANIM_ATTACK2]  = { "assets/p2/Sprites/Attack2.png",  4,  80 },
+        [ANIM_TAKE_HIT] = { "assets/p2/Sprites/Take hit.png", 3, 100 },
+        [ANIM_DEATH]    = { "assets/p2/Sprites/Death.png",    7, 120 },
     };
 
-    if (!player_init(&p1, engine->renderer, 200.0f, 500.0f, true, &p1_paths)) {
+    if (!player_init(&p1, engine->renderer, 200.0f, 500.0f, true, p1_defs)) {
         SDL_Log("Failed to init player 1");
         return false;
     }
 
-    if (!player_init(&p2, engine->renderer, 800.0f, 500.0f, false, &p2_paths)) {
+    if (!player_init(&p2, engine->renderer, 800.0f, 500.0f, false, p2_defs)) {
         SDL_Log("Failed to init player 2");
         return false;
     }
