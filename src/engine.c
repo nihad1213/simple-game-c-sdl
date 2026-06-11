@@ -98,7 +98,7 @@ bool engine_run(Engine* engine) {
 
     while (engine->is_running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
+            if (event.type == SDL_EVENT_QUIT || event.key.key == SDLK_ESCAPE) {
                 engine->is_running = false;
             }
         }
