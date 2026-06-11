@@ -69,3 +69,34 @@ void player_update(Player* player) {
         anim->last_frame_time = now;
     }
 }
+
+void player_render(Player* player, SDL_Renderer* renderer) {
+    Animation* anim = &player->animations[player->state];
+
+    SDL_FRect src = {
+        .x = (float)(anim->current_frame * anim->frame_width),
+        .y = 0,
+        .w = (float)anim->frame_width,
+        .h = (float)anim->frame_height,
+    };
+
+    SDL_FRect dst = {
+        .x = player->x,
+        .y = player->y,
+        .w = (float)anim->frame_width  * player->scale,
+        .h = (float)anim->frame_height * player->scale,
+    };
+
+    SDL_RenderTextureRotated(renderer, anim->sheet, &src, &dst,
+                             0.0, NULL,
+                             player->facing_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+}
+
+void player_free(Player* player) {
+    for (int i = 0; i < ANIM_COUNT; i++) {
+        if (player->animations[i].sheet) {
+            SDL_DestroyTexture(player->animations[i].sheet);
+            player->animations[i].sheet = NULL;
+        }
+    }
+}
