@@ -79,12 +79,12 @@ bool engine_run(Engine* engine) {
         [ANIM_DEATH]    = { "assets/p2/Sprites/Death.png",    7, 120 },
     };
 
-    if (!player_init(&p1, engine->renderer, 200.0f, 500.0f, true, p1_defs)) {
+    if (!player_init(&p1, engine->renderer, 50.0f, 442.0f, true, p1_defs)) {
         SDL_Log("Failed to init player 1");
         return false;
     }
 
-    if (!player_init(&p2, engine->renderer, 800.0f, 500.0f, false, p2_defs)) {
+    if (!player_init(&p2, engine->renderer, 800.0f, 442.0f, false, p2_defs)) {
         SDL_Log("Failed to init player 2");
         return false;
     }
