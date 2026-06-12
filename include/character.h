@@ -46,6 +46,7 @@ typedef struct {
     bool on_ground;                     /**< Whether the player is touching the ground. */
     Animation animations[ANIM_COUNT];   /**< Array of animations indexed by AnimationStates enum. */
     AnimationStates state;              /**< Current animation state of the player. */
+    SDL_FRect hitbox;                   /**< Tight bounding box around visible character (world space). */
 } Player;
 
 
@@ -64,3 +65,4 @@ void  player_handle_input(Player* player, const bool* keys, SDL_Scancode left, S
 void  player_update(Player* player, int screen_w);
 void  player_render(Player* player, SDL_Renderer* renderer);
 void  player_free(Player* player);
+bool  players_hitbox_overlap(Player* a, Player* b);

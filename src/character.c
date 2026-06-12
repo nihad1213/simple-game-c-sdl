@@ -49,6 +49,21 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
     return true;
 }
 
+
+#define HB_X_FRAC 0.5f
+#define HB_Y_FRAC 0.8f
+#define HB_Y_START 0.2f
+
+static void compute_hitbox(Player* player) {
+    Animation* cur = &player->animations[player->state];
+    float fw = (float)cur->frame_width  * player->scale;
+    float fh = (float)cur->frame_height * player->scale;
+    player->hitbox.w = fw * HB_X_FRAC;
+    player->hitbox.h = fh * HB_Y_FRAC;
+    player->hitbox.x = player->x + (fw - player->hitbox.w) * 0.5f;
+    player->hitbox.y = player->y + fh * HB_Y_START;
+}
+
 void player_update(Player* player, int screen_w) {
 
     if (!player->on_ground) player->vel_y += 0.5f;
@@ -62,10 +77,17 @@ void player_update(Player* player, int screen_w) {
         player->on_ground = true;
     }
 
-    Animation* cur = &player->animations[player->state];
-    float sprite_w = (float)cur->frame_width * player->scale;
-    if (player->x < 0)                   player->x = 0;
-    if (player->x + sprite_w > screen_w) player->x = (float)screen_w - sprite_w;
+    compute_hitbox(player);
+
+    if (player->hitbox.x < 0) {
+        player->x -= player->hitbox.x;
+        player->hitbox.x = 0;
+    }
+    float right = player->hitbox.x + player->hitbox.w;
+    if (right > (float)screen_w) {
+        player->x -= right - (float)screen_w;
+        player->hitbox.x = (float)screen_w - player->hitbox.w;
+    }
 
     if (!player->on_ground)
         player->state = player->vel_y < 0 ? ANIM_JUMP : ANIM_FALL;
@@ -81,6 +103,10 @@ void player_update(Player* player, int screen_w) {
         anim->current_frame   = (anim->current_frame + 1) % anim->frame_count;
         anim->last_frame_time = now;
     }
+}
+
+bool players_hitbox_overlap(Player* a, Player* b) {
+    return SDL_HasRectIntersectionFloat(&a->hitbox, &b->hitbox);
 }
 
 void player_render(Player* player, SDL_Renderer* renderer) {
@@ -103,6 +129,11 @@ void player_render(Player* player, SDL_Renderer* renderer) {
     SDL_RenderTextureRotated(renderer, anim->sheet, &src, &dst,
                              0.0, NULL,
                              player->facing_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
+
+#ifdef DEBUG_HITBOX
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderRect(renderer, &player->hitbox);
+#endif
 }
 
 void player_free(Player* player) {
