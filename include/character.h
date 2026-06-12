@@ -63,3 +63,5 @@ bool  player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool
 void  player_update(Player* player);
 void  player_render(Player* player, SDL_Renderer* renderer);
 void  player_free(Player* player);
+void player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SDL_Scancode right,
+                         SDL_Scancode jump);

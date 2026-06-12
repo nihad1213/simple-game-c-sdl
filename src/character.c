@@ -50,6 +50,25 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
 }
 
 void player_update(Player* player) {
+
+    if (!player->on_ground) player->vel_y += 0.5f;
+
+    player->x += player->vel_x;
+    player->y += player->vel_y;
+
+    if (player->y >= 442.0f) {
+        player->y = 442.0f;
+        player->vel_y = 0;
+        player->on_ground = true;
+    }
+
+    if (!player->on_ground)
+        player->state = player->vel_y < 0 ? ANIM_JUMP : ANIM_FALL;
+    else if (player->vel_x != 0)
+        player->state = ANIM_RUN;
+    else
+        player->state = ANIM_IDLE;
+
     Animation* anim = &player->animations[player->state];
     Uint64 now = SDL_GetTicks();
 
@@ -88,4 +107,19 @@ void player_free(Player* player) {
             player->animations[i].sheet = NULL;
         }
     }
+}
+
+void player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SDL_Scancode right,
+                         SDL_Scancode jump) {
+    
+    float speed = 4.0f;
+    player->vel_x = 0;
+
+    if (keys[left])  { player->vel_x = -speed; player->facing_right = false; }
+    if (keys[right]) { player->vel_x =  speed; player->facing_right = true;  }
+    if (keys[jump] && player->on_ground) {
+        player->vel_y = -12.0f;
+        player->on_ground = false;
+    }
+
 }

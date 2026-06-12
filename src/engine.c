@@ -120,6 +120,10 @@ bool engine_run(Engine* engine) {
         
         player_update(&p2);
         player_render(&p2, engine->renderer);
+
+        const bool* keys = SDL_GetKeyboardState(NULL);
+        player_handle_input(&p1, keys, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W);
+        player_handle_input(&p2, keys, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_UP);
         
 
         SDL_RenderPresent(engine->renderer);
