@@ -49,7 +49,7 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
     return true;
 }
 
-void player_update(Player* player) {
+void player_update(Player* player, int screen_w) {
 
     if (!player->on_ground) player->vel_y += 0.5f;
 
@@ -61,6 +61,11 @@ void player_update(Player* player) {
         player->vel_y = 0;
         player->on_ground = true;
     }
+
+    Animation* cur = &player->animations[player->state];
+    float sprite_w = (float)cur->frame_width * player->scale;
+    if (player->x < 0)                   player->x = 0;
+    if (player->x + sprite_w > screen_w) player->x = (float)screen_w - sprite_w;
 
     if (!player->on_ground)
         player->state = player->vel_y < 0 ? ANIM_JUMP : ANIM_FALL;

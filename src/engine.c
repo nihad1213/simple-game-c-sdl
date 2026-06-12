@@ -112,19 +112,21 @@ bool engine_run(Engine* engine) {
             }
         }
 
-        SDL_RenderClear(engine->renderer);
-        SDL_RenderTexture(engine->renderer, bg.frames[bg.current_frame], NULL, NULL);
-        
-
-        player_update(&p1);
-        player_render(&p1, engine->renderer);
-        
-        player_update(&p2);
-        player_render(&p2, engine->renderer);
+        int win_w, win_h;
+        SDL_GetWindowSize(engine->window, &win_w, &win_h);
 
         const bool* keys = SDL_GetKeyboardState(NULL);
         player_handle_input(&p1, keys, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W);
         player_handle_input(&p2, keys, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_UP);
+
+        SDL_RenderClear(engine->renderer);
+        SDL_RenderTexture(engine->renderer, bg.frames[bg.current_frame], NULL, NULL);
+
+        player_update(&p1, win_w);
+        player_render(&p1, engine->renderer);
+
+        player_update(&p2, win_w);
+        player_render(&p2, engine->renderer);
         
 
         SDL_RenderPresent(engine->renderer);
