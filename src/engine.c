@@ -26,6 +26,7 @@ bool engine_init(Engine* engine, const char* title, int width, int height) {
         return false;
     }
 
+    SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
     engine->renderer = SDL_CreateRenderer(engine->window, NULL);
     
     if (!engine->renderer) {
@@ -58,7 +59,7 @@ bool engine_run(Engine* engine) {
     Player p1;
     PlayerAnimDef p1_defs[ANIM_COUNT] = {
         [ANIM_IDLE]     = { "assets/p1/Sprites/Idle.png",     8, 100 },
-        [ANIM_RUN]      = { "assets/p1/Sprites/Run.png",      8,  80 },
+        [ANIM_RUN]      = { "assets/p1/Sprites/Run.png",      8,  5 },
         [ANIM_JUMP]     = { "assets/p1/Sprites/Jump.png",     4, 100 },
         [ANIM_FALL]     = { "assets/p1/Sprites/Fall.png",     4, 100 },
         [ANIM_ATTACK1]  = { "assets/p1/Sprites/Attack1.png",  6,  80 },
@@ -70,7 +71,7 @@ bool engine_run(Engine* engine) {
     Player p2;
     PlayerAnimDef p2_defs[ANIM_COUNT] = {
         [ANIM_IDLE]     = { "assets/p2/Sprites/Idle.png",     4, 200 },
-        [ANIM_RUN]      = { "assets/p2/Sprites/Run.png",      8,  80 },
+        [ANIM_RUN]      = { "assets/p2/Sprites/Run.png",      8,  5 },
         [ANIM_JUMP]     = { "assets/p2/Sprites/Jump.png",     2, 200 },
         [ANIM_FALL]     = { "assets/p2/Sprites/Fall.png",     2, 200 },
         [ANIM_ATTACK1]  = { "assets/p2/Sprites/Attack1.png",  4,  120 },
