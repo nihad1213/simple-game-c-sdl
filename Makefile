@@ -18,14 +18,18 @@ SDL_LIBS := $(shell pkg-config --libs sdl3)
 SDL_IMAGE_CFLAGS := $(shell pkg-config --cflags sdl3-image)
 SDL_IMAGE_LIBS := $(shell pkg-config --libs sdl3-image)
 
-CFLAGS += $(SDL_CFLAGS) $(SDL_IMAGE_CFLAGS)
+# SDL_ttf
+SDL_TTF_CFLAGS := $(shell pkg-config --cflags sdl3-ttf)
+SDL_TTF_LIBS := $(shell pkg-config --libs sdl3-ttf)
+
+CFLAGS += $(SDL_CFLAGS) $(SDL_IMAGE_CFLAGS) $(SDL_TTF_CFLAGS)
 
 .PHONY: all clean run
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS) | bin
-	$(CC) $(OBJS) -o $@ $(SDL_LIBS) $(SDL_IMAGE_LIBS) -lm
+	$(CC) $(OBJS) -o $@ $(SDL_LIBS) $(SDL_IMAGE_LIBS) $(SDL_TTF_LIBS) -lm
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
