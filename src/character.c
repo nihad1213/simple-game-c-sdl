@@ -45,6 +45,7 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
     player->is_taking_hit = false;
     player->hit_timer = 0;
     player->attack_box = (SDL_FRect){0, 0, 0, 0};
+    player->is_dead = false;
 
     for (int i = 0; i < ANIM_COUNT; i++) {
         if (!load_animation(renderer, &player->animations[i],
@@ -72,6 +73,18 @@ static void compute_hitbox(Player* player) {
 }
 
 void player_update(Player* player, int screen_w) {
+
+    if (player->is_dead) {
+        player->state = ANIM_DEATH;
+        Animation* da = &player->animations[ANIM_DEATH];
+        Uint64 now = SDL_GetTicks();
+        if (da->current_frame < da->frame_count - 1 &&
+            now - da->last_frame_time >= (Uint64)da->frame_delay_ms) {
+            da->current_frame++;
+            da->last_frame_time = now;
+        }
+        return;
+    }
 
     if (!player->on_ground) player->vel_y += 0.5f;
 
@@ -138,9 +151,17 @@ void player_update(Player* player, int screen_w) {
 }
 
 void player_apply_hit(Player* victim, int damage) {
-    if (victim->is_taking_hit) return;
+    if (victim->is_taking_hit || victim->is_dead) return;
     victim->health -= damage;
-    if (victim->health < 0) victim->health = 0;
+    if (victim->health <= 0) {
+        victim->health = 0;
+        victim->is_dead = true;
+        victim->is_attacking = false;
+        victim->is_taking_hit = false;
+        victim->animations[ANIM_DEATH].current_frame = 0;
+        victim->animations[ANIM_DEATH].last_frame_time = SDL_GetTicks();
+        return;
+    }
     victim->is_taking_hit = true;
     victim->hit_timer = SDL_GetTicks();
     victim->is_attacking = false;
@@ -185,7 +206,8 @@ void player_free(Player* player) {
 
 void player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SDL_Scancode right,
                          SDL_Scancode jump, SDL_Scancode attack1, SDL_Scancode attack2) {
-    
+    if (player->is_dead) return;
+
     float speed = 4.0f;
     player->vel_x = 0;
 

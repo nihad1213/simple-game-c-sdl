@@ -54,6 +54,7 @@ typedef struct {
     bool attack_landed;                 /**< Prevents the same swing from hitting twice. */
     bool is_taking_hit;                 /**< True while hit-stun animation is playing. */
     Uint64 hit_timer;                   /**< Timestamp when hit-stun started. */
+    bool is_dead;                       /**< True once health reaches zero. */
 } Player;
 
 
