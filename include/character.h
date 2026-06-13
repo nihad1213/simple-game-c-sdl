@@ -47,6 +47,13 @@ typedef struct {
     Animation animations[ANIM_COUNT];   /**< Array of animations indexed by AnimationStates enum. */
     AnimationStates state;              /**< Current animation state of the player. */
     SDL_FRect hitbox;                   /**< Tight bounding box around visible character (world space). */
+    SDL_FRect attack_box;               /**< Active hitbox extended forward during attack frames. */
+    int  health;                        /**< Current health points. */
+    bool is_attacking;                  /**< True while attack animation is playing. */
+    int  which_attack;                  /**< 1 or 2, which attack was triggered. */
+    bool attack_landed;                 /**< Prevents the same swing from hitting twice. */
+    bool is_taking_hit;                 /**< True while hit-stun animation is playing. */
+    Uint64 hit_timer;                   /**< Timestamp when hit-stun started. */
 } Player;
 
 
@@ -61,8 +68,10 @@ typedef struct {
 
 
 bool  player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool facing_right, const PlayerAnimDef defs[ANIM_COUNT]);
-void  player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SDL_Scancode right, SDL_Scancode jump);
+void  player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SDL_Scancode right,
+     SDL_Scancode jump, SDL_Scancode attack1, SDL_Scancode attack2);
 void  player_update(Player* player, int screen_w);
 void  player_render(Player* player, SDL_Renderer* renderer);
 void  player_free(Player* player);
 bool  players_hitbox_overlap(Player* a, Player* b);
+void  player_apply_hit(Player* victim, int damage);

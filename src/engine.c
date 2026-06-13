@@ -131,8 +131,8 @@ bool engine_run(Engine* engine) {
         [ANIM_RUN]      = { "assets/p1/Sprites/Run.png",      8,   5 },
         [ANIM_JUMP]     = { "assets/p1/Sprites/Jump.png",     2, 100 },
         [ANIM_FALL]     = { "assets/p1/Sprites/Fall.png",     2, 100 },
-        [ANIM_ATTACK1]  = { "assets/p1/Sprites/Attack1.png",  6,  80 },
-        [ANIM_ATTACK2]  = { "assets/p1/Sprites/Attack2.png",  6,  80 },
+        [ANIM_ATTACK1]  = { "assets/p1/Sprites/Attack1.png",  6,  60 },
+        [ANIM_ATTACK2]  = { "assets/p1/Sprites/Attack2.png",  6,  60 },
         [ANIM_TAKE_HIT] = { "assets/p1/Sprites/Take Hit.png", 4, 100 },
         [ANIM_DEATH]    = { "assets/p1/Sprites/Death.png",    6, 120 },
     };
@@ -143,10 +143,10 @@ bool engine_run(Engine* engine) {
         [ANIM_RUN]      = { "assets/p2/Sprites/Run.png",      8,   5 },
         [ANIM_JUMP]     = { "assets/p2/Sprites/Jump.png",     2, 200 },
         [ANIM_FALL]     = { "assets/p2/Sprites/Fall.png",     2, 200 },
-        [ANIM_ATTACK1]  = { "assets/p2/Sprites/Attack1.png",  4, 120 },
-        [ANIM_ATTACK2]  = { "assets/p2/Sprites/Attack2.png",  4, 120 },
+        [ANIM_ATTACK1]  = { "assets/p2/Sprites/Attack1.png",  4, 70 },
+        [ANIM_ATTACK2]  = { "assets/p2/Sprites/Attack2.png",  4, 70 },
         [ANIM_TAKE_HIT] = { "assets/p2/Sprites/Take hit.png", 3, 100 },
-        [ANIM_DEATH]    = { "assets/p2/Sprites/Death.png",    7, 120 },
+        [ANIM_DEATH]    = { "assets/p2/Sprites/Death.png",    7, 20 },
     };
 
     if (!player_init(&p1, engine->renderer, 50.0f, 442.0f, true, p1_defs)) {
@@ -184,16 +184,30 @@ bool engine_run(Engine* engine) {
         SDL_GetWindowSize(engine->window, &win_w, &win_h);
 
         const bool* keys = SDL_GetKeyboardState(NULL);
-        player_handle_input(&p1, keys, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W);
-        player_handle_input(&p2, keys, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_UP);
+        player_handle_input(&p1, keys, SDL_SCANCODE_A, SDL_SCANCODE_D, SDL_SCANCODE_W,
+                            SDL_SCANCODE_F, SDL_SCANCODE_G);
+        player_handle_input(&p2, keys, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_UP,
+                            SDL_SCANCODE_KP_1, SDL_SCANCODE_KP_2);
 
         SDL_RenderClear(engine->renderer);
         SDL_RenderTexture(engine->renderer, bg.frames[bg.current_frame], NULL, NULL);
 
         player_update(&p1, win_w);
-        player_render(&p1, engine->renderer);
-
         player_update(&p2, win_w);
+
+        // Hit detection: attack_box.w > 0 means the box is active this frame
+        if (p1.is_attacking && !p1.attack_landed && p1.attack_box.w > 0 &&
+            SDL_HasRectIntersectionFloat(&p1.attack_box, &p2.hitbox)) {
+            player_apply_hit(&p2, 10);
+            p1.attack_landed = true;
+        }
+        if (p2.is_attacking && !p2.attack_landed && p2.attack_box.w > 0 &&
+            SDL_HasRectIntersectionFloat(&p2.attack_box, &p1.hitbox)) {
+            player_apply_hit(&p1, 10);
+            p2.attack_landed = true;
+        }
+
+        player_render(&p1, engine->renderer);
         player_render(&p2, engine->renderer);
 
         SDL_RenderPresent(engine->renderer);

@@ -38,6 +38,13 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
     player->on_ground = true;
     player->state = ANIM_IDLE;
     player->scale = 2.0f;
+    player->health = 100;
+    player->is_attacking = false;
+    player->which_attack = 0;
+    player->attack_landed = false;
+    player->is_taking_hit = false;
+    player->hit_timer = 0;
+    player->attack_box = (SDL_FRect){0, 0, 0, 0};
 
     for (int i = 0; i < ANIM_COUNT; i++) {
         if (!load_animation(renderer, &player->animations[i],
@@ -50,9 +57,9 @@ bool player_init(Player* player, SDL_Renderer* renderer, float x, float y, bool 
 }
 
 
-#define HB_X_FRAC 0.5f
-#define HB_Y_FRAC 0.8f
-#define HB_Y_START 0.2f
+#define HB_X_FRAC 0.2f
+#define HB_Y_FRAC 0.4f
+#define HB_Y_START 0.40f
 
 static void compute_hitbox(Player* player) {
     Animation* cur = &player->animations[player->state];
@@ -89,20 +96,56 @@ void player_update(Player* player, int screen_w) {
         player->hitbox.x = (float)screen_w - player->hitbox.w;
     }
 
-    if (!player->on_ground)
-        player->state = player->vel_y < 0 ? ANIM_JUMP : ANIM_FALL;
-    else if (player->vel_x != 0)
-        player->state = ANIM_RUN;
-    else
-        player->state = ANIM_IDLE;
-
-    Animation* anim = &player->animations[player->state];
     Uint64 now = SDL_GetTicks();
 
-    if (now - anim->last_frame_time >= (Uint64)anim->frame_delay_ms) {
-        anim->current_frame   = (anim->current_frame + 1) % anim->frame_count;
-        anim->last_frame_time = now;
+    if (player->is_taking_hit) {
+        player->state = ANIM_TAKE_HIT;
+        if (now - player->hit_timer >= 400)
+            player->is_taking_hit = false;
+    } else if (player->is_attacking) {
+        player->state = (player->which_attack == 1) ? ANIM_ATTACK1 : ANIM_ATTACK2;
+    } else if (!player->on_ground) {
+        player->state = player->vel_y < 0 ? ANIM_JUMP : ANIM_FALL;
+    } else if (player->vel_x != 0) {
+        player->state = ANIM_RUN;
+    } else {
+        player->state = ANIM_IDLE;
     }
+
+    Animation* anim = &player->animations[player->state];
+    if (now - anim->last_frame_time >= (Uint64)anim->frame_delay_ms) {
+        anim->current_frame = (anim->current_frame + 1) % anim->frame_count;
+        anim->last_frame_time = now;
+        if (player->is_attacking && anim->current_frame == 0)
+            player->is_attacking = false;
+    }
+
+    player->attack_box = (SDL_FRect){0, 0, 0, 0};
+    if (player->is_attacking) {
+        AnimationStates atk = (player->which_attack == 1) ? ANIM_ATTACK1 : ANIM_ATTACK2;
+        Animation* atk_anim = &player->animations[atk];
+        int f = atk_anim->current_frame;
+        if (f >= 1 && f <= atk_anim->frame_count - 2) {
+            float box_w = player->hitbox.w * 0.8f;
+            float box_h = player->hitbox.h * 0.5f;
+            float box_y = player->hitbox.y + player->hitbox.h * 0.1f;
+            float box_x = player->facing_right
+                ? player->hitbox.x + player->hitbox.w
+                : player->hitbox.x - box_w;
+            player->attack_box = (SDL_FRect){box_x, box_y, box_w, box_h};
+        }
+    }
+}
+
+void player_apply_hit(Player* victim, int damage) {
+    if (victim->is_taking_hit) return;
+    victim->health -= damage;
+    if (victim->health < 0) victim->health = 0;
+    victim->is_taking_hit = true;
+    victim->hit_timer = SDL_GetTicks();
+    victim->is_attacking = false;
+    victim->animations[ANIM_TAKE_HIT].current_frame = 0;
+    victim->animations[ANIM_TAKE_HIT].last_frame_time = SDL_GetTicks();
 }
 
 bool players_hitbox_overlap(Player* a, Player* b) {
@@ -129,11 +172,6 @@ void player_render(Player* player, SDL_Renderer* renderer) {
     SDL_RenderTextureRotated(renderer, anim->sheet, &src, &dst,
                              0.0, NULL,
                              player->facing_right ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
-
-#ifdef DEBUG_HITBOX
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderRect(renderer, &player->hitbox);
-#endif
 }
 
 void player_free(Player* player) {
@@ -146,7 +184,7 @@ void player_free(Player* player) {
 }
 
 void player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SDL_Scancode right,
-                         SDL_Scancode jump) {
+                         SDL_Scancode jump, SDL_Scancode attack1, SDL_Scancode attack2) {
     
     float speed = 4.0f;
     player->vel_x = 0;
@@ -156,6 +194,20 @@ void player_handle_input(Player* player, const bool* keys, SDL_Scancode left, SD
     if (keys[jump] && player->on_ground) {
         player->vel_y = -12.0f;
         player->on_ground = false;
+    }
+    if (keys[attack1] && !player->is_attacking && !player->is_taking_hit) {
+        player->is_attacking = true;
+        player->which_attack = 1;
+        player->attack_landed = false;
+        player->animations[ANIM_ATTACK1].current_frame = 0;
+        player->animations[ANIM_ATTACK1].last_frame_time = SDL_GetTicks();
+    }
+    if (keys[attack2] && !player->is_attacking && !player->is_taking_hit) {
+        player->is_attacking = true;
+        player->which_attack = 2;
+        player->attack_landed = false;
+        player->animations[ANIM_ATTACK2].current_frame = 0;
+        player->animations[ANIM_ATTACK2].last_frame_time = SDL_GetTicks();
     }
 
 }
